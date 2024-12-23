@@ -2,7 +2,7 @@ const express = require("express");
 
 require("dotenv").config();
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
 const app = express();
 
@@ -32,9 +32,17 @@ async function run() {
     const database = client.db("HomeLengoRealEstate");
     const homes = database.collection("homes");
 
+    // find homes all Data
     app.get("/homes", async (req, res) => {
       const homesdata = homes.find();
       const result = await homesdata.toArray();
+      res.send(result);
+    });
+
+    app.get("/homes/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const result = await homes.findOne(filter);
       res.send(result);
     });
   } finally {
