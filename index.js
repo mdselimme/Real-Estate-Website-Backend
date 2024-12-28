@@ -4,6 +4,8 @@ require("dotenv").config();
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
+const jwt = require("jsonwebtoken");
+
 const app = express();
 
 const cors = require("cors");
@@ -11,6 +13,7 @@ const cors = require("cors");
 const port = process.env.PORT || 2000;
 
 app.use(cors());
+app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@cluster0.dopmx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -31,6 +34,13 @@ async function run() {
 
     const database = client.db("HomeLengoRealEstate");
     const homes = database.collection("homes");
+
+    app.post("/jwt", async (req, res) => {
+      const body = req.body;
+      console.log(body);
+      const token = jwt.sign(body, "secret", { expiresIn: "1h" });
+      res.send(token);
+    });
 
     // find homes all Data
     app.get("/homes", async (req, res) => {
