@@ -1,19 +1,24 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
 
 require("dotenv").config();
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 
-const jwt = require("jsonwebtoken");
-
 const app = express();
 
-const cors = require("cors");
-
 const port = process.env.PORT || 2000;
-
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    // methods: ["GET", "POST", "PUT", "DELETE"], // List allowed methods
+    credentials: true, // Allow cookies and credentials
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 
 const uri = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@cluster0.dopmx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -35,12 +40,19 @@ async function run() {
     const database = client.db("HomeLengoRealEstate");
     const homes = database.collection("homes");
 
-    app.post("/jwt", async (req, res) => {
+    // create jwt token
+    app.post("/email", async (req, res) => {
       const body = req.body;
       console.log(body);
       const token = jwt.sign(body, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "1h",
       });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "none",
+      });
+      console.log(token);
       res.send(token);
     });
 
