@@ -39,6 +39,7 @@ async function run() {
 
     const database = client.db("HomeLengoRealEstate");
     const homes = database.collection("homes");
+    const users = database.collection("usersData");
 
     // create jwt token
     app.post("/email", async (req, res) => {
@@ -56,6 +57,13 @@ async function run() {
       res.send(token);
     });
 
+    // send users data to database
+    app.post("/users", async (req, res) => {
+      const usersData = req.body;
+      const result = await users.insertOne(usersData);
+      res.send(result);
+    });
+
     // find homes all Data
     app.get("/homes", async (req, res) => {
       const homesdata = homes.find();
@@ -63,6 +71,7 @@ async function run() {
       res.send(result);
     });
 
+    // find home data by id
     app.get("/homes/:id", async (req, res) => {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
