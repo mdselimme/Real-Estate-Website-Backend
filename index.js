@@ -40,6 +40,14 @@ async function run() {
     const database = client.db("HomeLengoRealEstate");
     const homes = database.collection("homes");
     const users = database.collection("usersData");
+    const cartsCollection = database.collection("carts");
+
+    // add to cart product in the server
+    app.post("/carts", async (req, res) => {
+      const databody = req.body;
+      const result = await cartsCollection.insertOne(databody);
+      res.send(result);
+    });
 
     // create jwt token
     app.post("/email", async (req, res) => {
