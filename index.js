@@ -12,8 +12,8 @@ const app = express();
 const port = process.env.PORT || 2000;
 app.use(
   cors({
-    origin: "http://localhost:5173",
-    // methods: ["GET", "POST", "PUT", "DELETE"], // List allowed methods
+    origin: ["http://localhost:5173", "https://home-lengo-residence.web.app"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // List allowed methods
     credentials: true, // Allow cookies and credentials
   })
 );
@@ -43,7 +43,7 @@ async function run() {
 
     // create jwt token
     app.post("/email", async (req, res) => {
-      const body = req.body;
+      const body = req.query;
       console.log(body);
       const token = jwt.sign(body, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: "1h",
