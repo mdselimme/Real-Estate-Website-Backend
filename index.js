@@ -70,6 +70,19 @@ async function run() {
       res.send(result);
     });
 
+    // update last log in time
+    app.patch("/users", async (req, res) => {
+      const body = req.body;
+      const filter = { email: body.email };
+      const updateDoc = {
+        $set: {
+          lastLoggedInTime: body.lastLoggedInTime,
+        },
+      };
+      const result = await users.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
     // find homes all Data
     app.get("/homes", async (req, res) => {
       const homesdata = homes.find();
