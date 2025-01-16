@@ -64,6 +64,12 @@ async function run() {
       res.send(result);
     });
 
+    // get users data from database
+    app.get("/users", async (req, res) => {
+      const result = await users.find().toArray();
+      res.send(result);
+    });
+
     // find homes all Data
     app.get("/homes", async (req, res) => {
       const homesdata = homes.find();
