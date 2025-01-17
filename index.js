@@ -49,6 +49,12 @@ async function run() {
       res.send(result);
     });
 
+    // get data from carts
+    app.get("/carts", async (req, res) => {
+      const results = await cartsCollection.find().toArray();
+      res.send(results);
+    });
+
     // create jwt token
     app.post("/email", async (req, res) => {
       const body = req.query;
