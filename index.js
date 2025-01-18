@@ -57,6 +57,15 @@ async function run() {
       res.send(results);
     });
 
+    // carts products delete
+    app.delete("/carts/product/:id", async (req, res) => {
+      console.log(req.params.id);
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await cartsCollection.deleteOne(query);
+      res.send(result);
+    });
+
     // create jwt token
     app.post("/email", async (req, res) => {
       const body = req.query;
