@@ -67,7 +67,7 @@ async function run() {
     });
 
     // create jwt token
-    app.post("/email", async (req, res) => {
+    app.post("/jwttoken", async (req, res) => {
       const body = req.query;
       console.log(body);
       const token = jwt.sign(body, process.env.ACCESS_TOKEN_SECRET, {
@@ -79,7 +79,7 @@ async function run() {
         sameSite: "none",
       });
       console.log(token);
-      res.send(token);
+      res.send({ token });
     });
 
     // send users data to database
@@ -89,8 +89,25 @@ async function run() {
       res.send(result);
     });
 
+    // verify Json Web Token
+
+    const verifyToken = (req, res, next) => {
+      console.log(req.headers.authorization);
+      if (!req.headers.authorization) {
+        return res.status(401).send({ message: "Access Forbidden" });
+      }
+      const token = req.headers.authorization.split(" ")[1];
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+        if (error) {
+          return res.status(401).send({ message: "Access Forbidden" });
+        }
+        req.decoded = decoded;
+        next();
+      });
+    };
+
     // get users data from database
-    app.get("/users", async (req, res) => {
+    app.get("/users", verifyToken, async (req, res) => {
       const result = await users.find().toArray();
       res.send(result);
     });
