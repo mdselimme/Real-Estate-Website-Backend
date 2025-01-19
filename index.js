@@ -78,7 +78,6 @@ async function run() {
         secure: false,
         sameSite: "none",
       });
-      console.log(token);
       res.send({ token });
     });
 
@@ -92,7 +91,6 @@ async function run() {
     // verify Json Web Token
 
     const verifyToken = (req, res, next) => {
-      console.log(req.headers.authorization);
       if (!req.headers.authorization) {
         return res.status(401).send({ message: "Access Forbidden" });
       }
@@ -122,6 +120,20 @@ async function run() {
         },
       };
       const result = await users.updateOne(filter, updateDoc);
+      res.send(result);
+    });
+
+    // make admin user code
+    app.patch("/make/admin", verifyToken, async (req, res) => {
+      const email = req.query.email;
+      console.log(email);
+      const query = { email: email };
+      const updateDoc = {
+        $set: {
+          admin: true,
+        },
+      };
+      const result = await users.updateOne(query, updateDoc);
       res.send(result);
     });
 
