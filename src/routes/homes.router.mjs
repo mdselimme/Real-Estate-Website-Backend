@@ -1,13 +1,14 @@
 
 import express from "express";
 import { homes } from "../config/db/mongodb.mjs";
+import { ObjectId } from "mongodb";
 export const homesRouter = express.Router();
 
 
 // find homes all Data
 homesRouter.get("/", async (req, res) => {
     try {
-        const homesdata = homes.find();
+        const homesdata = await homes.find();
         const result = await homesdata.toArray();
         res.send(result);
     } catch (error) {
