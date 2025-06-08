@@ -1,8 +1,7 @@
-import express from "express";
-import { users } from "../config/db/mongodb.mjs";
-import verifyToken from "../middleware/verifyToken.mjs";
-export const usersRouter = express.Router();
-
+const express = require('express');
+const usersRouter = express.Router({ mergeParams: true });
+const verifyToken = require('../middleware/verifyToken');
+const { users } = require('../config/db/mongodb');
 
 
 // send users data to database
@@ -43,3 +42,7 @@ usersRouter.patch("/", async (req, res) => {
         console.log({ errorMessage: error.message });
     }
 });
+
+
+
+module.exports = usersRouter;

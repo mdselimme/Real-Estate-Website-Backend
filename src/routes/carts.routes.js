@@ -1,9 +1,7 @@
-
-import express from "express";
-import { cartsCollection } from "../config/db/mongodb.mjs";
-export const cartsRouter = express.Router();
-
-
+const express = require("express");
+const { cartsCollection } = require('../config/db/mongodb');
+const { ObjectId } = require("mongodb");
+const cartsRouter = express.Router({ mergeParams: true });
 
 // add to cart product in the server
 cartsRouter.post("/", async (req, res) => {
@@ -39,3 +37,5 @@ cartsRouter.delete("/product/:id", async (req, res) => {
         console.log({ errorMessage: error.message });
     }
 });
+
+module.exports = cartsRouter;

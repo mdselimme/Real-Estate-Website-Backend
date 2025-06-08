@@ -1,5 +1,5 @@
-import app from "./src/app/app.mjs";
-import { client } from "./src/config/db/mongodb.mjs";
+const app = require('./src/app/app');
+const { client } = require('./src/config/db/mongodb');
 const port = process.env.PORT || 2000;
 
 let server;
@@ -16,4 +16,6 @@ const bootstrap = async () => {
   }
 };
 
-bootstrap(); 
+bootstrap();
+
+module.exports = app;

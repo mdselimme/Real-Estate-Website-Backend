@@ -1,8 +1,7 @@
-
-import express from "express";
-import verifyToken from "../middleware/verifyToken.mjs";
-import { users } from "../config/db/mongodb.mjs";
-export const adminsRouter = express.Router();
+const express = require("express");
+const adminsRouter = express.Router({ mergeParams: true });
+const verifyToken = require("../middleware/verifyToken.js");
+const { users } = require("../config/db/mongodb.js");
 
 
 // make admin user code
@@ -42,3 +41,5 @@ adminsRouter.get("/find/:email", verifyToken, async (req, res) => {
         console.log({ errorMessage: error.message });
     }
 });
+
+module.exports = adminsRouter;

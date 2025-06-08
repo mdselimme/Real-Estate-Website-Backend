@@ -1,14 +1,13 @@
-
-import express from "express";
-import { homes } from "../config/db/mongodb.mjs";
-import { ObjectId } from "mongodb";
-export const homesRouter = express.Router();
+const express = require("express");
+const { homes } = require('../config/db/mongodb');
+const { ObjectId } = require("mongodb");
+const homesRouter = express.Router({ mergeParams: true });
 
 
 // find homes all Data
 homesRouter.get("/", async (req, res) => {
     try {
-        const homesdata = await homes.find();
+        const homesdata = homes.find();
         const result = await homesdata.toArray();
         res.send(result);
     } catch (error) {
@@ -27,3 +26,5 @@ homesRouter.get("/:id", async (req, res) => {
         console.log({ errorMessage: error.message });
     }
 });
+
+module.exports = homesRouter;
