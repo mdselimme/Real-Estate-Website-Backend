@@ -17,7 +17,6 @@ app.use('/carts', cartsRouter);
 app.use('/admin', adminsRouter);
 app.use('/middleware', middlewareRouter);
 
-
 app.use(
     cors({
         origin: ["http://localhost:5173", "https://home-lengo-residence.web.app"],
@@ -28,8 +27,7 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-
-
+// OPEN ROUTES 
 app.get("/", (req, res) => {
     res.send("Server is running");
 });
